@@ -7,3 +7,20 @@
 #  - Настроить параметры безопасности и JWT.
 #  - Включить Swagger UI.
 
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_DB_HOST}:${POSTGRES_DB_INTERNAL_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
