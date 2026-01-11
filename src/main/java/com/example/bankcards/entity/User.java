@@ -19,7 +19,6 @@ public class User {
     private UUID id;
     private String name;
     private String surname;
-    private String email;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

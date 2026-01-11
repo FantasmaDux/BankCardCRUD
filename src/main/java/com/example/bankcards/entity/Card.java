@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -22,6 +23,8 @@ public class Card {
     private String number;
     private String expiryDate;
     private String cvv;
+
+    private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
     private CardStatus status;
