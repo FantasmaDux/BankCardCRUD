@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +22,7 @@ public class Card {
     private UUID id;
 
     private String number;
-    private String expiryDate;
+    private LocalDate expiryDate;
     private String cvv;
 
     private BigDecimal balance;
