@@ -2,12 +2,13 @@ package com.example.bankcards.service.card;
 
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.dto.CardFilterDto;
-import com.example.bankcards.entity.Card;
-import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.CardEntity;
+import com.example.bankcards.entity.UserEntity;
 import com.example.bankcards.enums.CardStatus;
 import com.example.bankcards.exception.CardNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.request.CardCreationRequest;
+import com.example.bankcards.request.CreateCardRequest;
 import com.example.bankcards.request.CardTransferRequest;
 import com.example.bankcards.request.CardUpdateAdminRequest;
 import com.example.bankcards.util.CardUtils;
@@ -41,8 +42,8 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto createCard(CardCreationRequest cardCreationRequest) {
-        Card card = new Card();
-        User user = userRepository.getUserById(cardCreationRequest.getUserId());
+        CardEntity card = new CardEntity();
+        UserEntity user = userRepository.getUserById(cardCreationRequest.getUserId());
 
         card.setStatus(CardStatus.ACTIVE);
         card.setExpiryDate(CardUtils.generateCardExpireDate());
@@ -57,7 +58,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto updateCard(UUID cardId, CardUpdateAdminRequest cardUpdateAdminRequest) {
-        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        CardEntity card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
 
         card.setNumber(cardUpdateAdminRequest.getNumber());
         card.setStatus(cardUpdateAdminRequest.getStatus());
@@ -66,7 +67,7 @@ public class CardServiceImpl implements CardService {
         card.setExpiryDate(cardUpdateAdminRequest.getExpiryDate());
         card.setOwner(cardUpdateAdminRequest.getOwner());
 
-        Card updatedCard = cardRepository.save(card);
+        CardEntity updatedCard = cardRepository.save(card);
         return modelMapper.map(updatedCard, CardDto.class);
     }
 
@@ -77,7 +78,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public BigDecimal getBalance(UUID cardId) {
-        Card card = cardRepository.getCardById(cardId);
+        CardEntity card = cardRepository.getCardById(cardId);
         return card.getBalance();
     }
 
@@ -87,10 +88,10 @@ public class CardServiceImpl implements CardService {
         UUID userReceiver = cardTransferRequest.getUserReceiverId();
         BigDecimal sentSum = cardTransferRequest.getSentSum();
 
-        Card cardUserSender = cardRepository.getCardById(userSender);
+        CardEntity cardUserSender = cardRepository.getCardById(userSender);
         cardUserSender.setBalance(cardUserSender.getBalance().subtract(sentSum));
 
-        Card cardReceiver = cardRepository.getCardById(userReceiver);
+        CardEntity cardReceiver = cardRepository.getCardById(userReceiver);
         cardReceiver.setBalance(cardReceiver.getBalance().add(sentSum));
 
         cardRepository.save(cardUserSender);
@@ -99,13 +100,13 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void blockCard(UUID cardId) {
-        Card card = cardRepository.getCardById(cardId);
+        CardEntity card = cardRepository.getCardById(cardId);
         card.setStatus(CardStatus.BLOCKED);
     }
 
     @Override
     public void activateCard(UUID cardId) {
-        Card card = cardRepository.getCardById(cardId);
+        CardEntity card = cardRepository.getCardById(cardId);
         card.setStatus(CardStatus.ACTIVE);
     }
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "cards")
-public class Card {
+public class CardEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,6 +32,6 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User owner;
+    private UserEntity owner;
 
 }

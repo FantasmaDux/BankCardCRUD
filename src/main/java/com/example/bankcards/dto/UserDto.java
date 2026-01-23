@@ -1,7 +1,7 @@
 package com.example.bankcards.dto;
 
-import com.example.bankcards.entity.Card;
-import com.example.bankcards.entity.Role;
+import com.example.bankcards.entity.CardEntity;
+import com.example.bankcards.entity.RoleEntity;
 import lombok.Data;
 
 import java.util.Collection;
@@ -15,6 +15,6 @@ public class UserDto {
     private UUID id;
     private String name;
     private String surname;
-    private Collection<Role> roles = new HashSet<>();
-    private List<Card> cards;
+    private Collection<RoleEntity> roles = new HashSet<>();
+    private List<CardEntity> cards;
 }

@@ -2,7 +2,7 @@ package com.example.bankcards.service.card;
 
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.dto.CardFilterDto;
-import com.example.bankcards.request.CardCreationRequest;
+import com.example.bankcards.request.CreateCardRequest;
 import com.example.bankcards.request.CardTransferRequest;
 import com.example.bankcards.request.CardUpdateAdminRequest;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ public interface CardService {
 
     Page<CardDto> getAllCardsByUsernameForAdmin(String username, CardFilterDto filter, Pageable pageable);
 
-    CardDto createCard(CardCreationRequest cardCreationRequest);
+    CardDto createCard(CreateCardRequest cardCreationRequest);
 
     CardDto updateCard(UUID cardId, CardUpdateAdminRequest cardUpdateAdminRequest);
 

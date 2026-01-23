@@ -14,17 +14,17 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "roles")
-public class Role {
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
 
-    public Role(String name) {
+    public RoleEntity(String name) {
         this.name = name;
     }
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Collection<User> users = new HashSet<>();
+    private Collection<UserEntity> users = new HashSet<>();
 }

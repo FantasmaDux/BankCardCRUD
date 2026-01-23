@@ -1,6 +1,6 @@
 package com.example.bankcards.request;
 
-import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.UserEntity;
 import com.example.bankcards.enums.CardStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class CardUpdateAdminRequest {
     private String cvv;
     private BigDecimal balance;
     private CardStatus status;
-    private User owner;
+    private UserEntity owner;
 }

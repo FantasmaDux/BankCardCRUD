@@ -3,22 +3,26 @@ package com.example.bankcards.entity;
 import com.example.bankcards.enums.RequestStatus;
 import com.example.bankcards.enums.RequestType;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "card_requests")
-public class CardRequest {
+@Getter
+@Setter
+public class CardRequestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
-    private Card card;
+    private CardEntity card;
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
@@ -30,5 +34,5 @@ public class CardRequest {
     private LocalDateTime processedAt;
 
     @ManyToOne
-    private User processedBy;
+    private UserEntity processedBy;
 }
