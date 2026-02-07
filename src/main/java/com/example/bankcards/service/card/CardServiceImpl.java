@@ -2,7 +2,9 @@ package com.example.bankcards.service.card;
 
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.dto.CardFilterDto;
+import com.example.bankcards.dto.CardRequestDto;
 import com.example.bankcards.entity.CardEntity;
+import com.example.bankcards.entity.CardRequestEntity;
 import com.example.bankcards.entity.UserEntity;
 import com.example.bankcards.enums.CardStatus;
 import com.example.bankcards.exception.CardNotFoundException;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,15 +33,38 @@ public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
     @Override
     public Page<CardDto> getAllCardsForAdmin(CardFilterDto filter, Pageable pageable) {
-        return null;
+        return cardRepository.findAll(pageable).map(this::convertToDto);
     }
 
     @Override
     public Page<CardDto> getAllCardsByUsernameForAdmin(String username, CardFilterDto filter, Pageable pageable) {
-        return null;
+        UserEntity user = userRepository.findByName(username);
+        return cardRepository.findByOwner(user, pageable).map(this::convertToDto);
+    }
+
+    @Override
+    public Page<CardDto> getAllCardsForUser(CardFilterDto filter, Pageable pageable) {
+        String currentUsername = getCurrentUsername();
+        UserEntity currentUser = userRepository.findByName(currentUsername);
+        return cardRepository.findByOwner(currentUser, pageable).map(this::convertToDto);
+
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+        return authentication.getName();
+    }
+
+    @Override
+    public CardDto getCard(UUID cardId) {
+        return convertToDto(cardRepository.getCardById(cardId));
     }
 
     @Override
@@ -108,5 +135,9 @@ public class CardServiceImpl implements CardService {
     public void activateCard(UUID cardId) {
         CardEntity card = cardRepository.getCardById(cardId);
         card.setStatus(CardStatus.ACTIVE);
+    }
+
+    private CardDto convertToDto(CardEntity entity) {
+        return modelMapper.map(entity, CardDto.class);
     }
 }
